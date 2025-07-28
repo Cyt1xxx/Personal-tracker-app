@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+venv/
+
+# Environment variables
+.env
+.env.*local
+
+# IDE (Integrated Development Environment)
+.vscode/ # Visual Studio Code
+.idea/ # PyCharm and other JetBrains IDEs
+*.iml # JetBrains IDEs
+
+# OS specific
+.DS_Store # macOS
+Thumbs.db # Windows
+ehthumbs.db # Windows
+Desktop.ini # Windows
+
+# Logs and temporary files
+*.log
+logs/
+tmp/
+*.tmp
+
+# Database specific files
+*.db
+
+
+# Pytest
+.pytest_cache/
+.coverage
+
+# Jupyter Notebook files
+.ipynb_checkpoints/
