@@ -38,7 +38,6 @@ tmp/
 # Database specific files
 *.db
 
-
 # Pytest
 .pytest_cache/
 .coverage
