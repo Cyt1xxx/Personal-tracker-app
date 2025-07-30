@@ -44,3 +44,6 @@ tmp/
 
 # Jupyter Notebook files
 .ipynb_checkpoints/
+
+#Alembic
+alembic/versions/*.pyc
