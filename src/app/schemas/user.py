@@ -22,3 +22,7 @@ class UserResponse(BaseModel):
 class Token(BaseModel):
     acess_token: str
     token_type: str
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
