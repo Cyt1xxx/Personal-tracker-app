@@ -1,9 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from src.app.schemas.user import UserCreate, UserResponse
 from src.app.models.user import User
 from src.app.database.database import get_db
 from src.app.crud import user as crud_user
+from src.app.schemas.user import Token
+from src.app.security import create_access_token
+from src.app.core.config import get_settings
+from datetime import timedelta
+
+settings = get_settings()
 
 router = APIRouter(
     prefix="/users",
@@ -35,3 +42,28 @@ def get_user(username: str, db: Session = Depends(get_db)):
         )
     
     return db_user
+
+@router.post("/token", response_model=Token)
+async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
+    user = crud_user.get_user_by_username(db, username=form_data.username)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect username or password"
+        )
+    
+    if not crud_user.verify_password(form_data.password, user.password_hash):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect username or password"
+        )
+    
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    
+    #TODO: Create role scheme in Pydantic model and make alembic migration with it, make asyncio CRUD functions
+    access_token = create_access_token(
+        data={"sub": user.username, "user_id": user.id, "role": "user"},
+        expires_delta= access_token_expires
+    )
+
+    return {"access_token": access_token, "token_type": "bearer"} 
