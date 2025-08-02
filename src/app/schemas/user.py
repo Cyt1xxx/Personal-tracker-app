@@ -20,7 +20,7 @@ class UserResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 class Token(BaseModel):
-    acess_token: str
+    access_token: str
     token_type: str
 
 class UserLogin(BaseModel):
