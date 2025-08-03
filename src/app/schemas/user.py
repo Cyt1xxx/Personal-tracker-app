@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from typing import Optional
 
 class UserCreate(BaseModel):
     username: str = Field(..., min_length=3, max_length=50)
@@ -26,3 +27,6 @@ class Token(BaseModel):
 class UserLogin(BaseModel):
     username: str
     password: str
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
