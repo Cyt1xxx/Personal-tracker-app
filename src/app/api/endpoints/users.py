@@ -5,8 +5,8 @@ from src.app.schemas.user import UserCreate, UserResponse
 from src.app.models.user import User
 from src.app.database.database import get_db
 from src.app.crud import user as crud_user
-from src.app.schemas.user import Token
-from src.app.security import create_access_token
+from src.app.schemas.user import Token, TokenData
+from src.app.security import create_access_token, get_current_user_from_token
 from src.app.core.config import get_settings
 from datetime import timedelta
 
@@ -67,3 +67,10 @@ async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth
     )
 
     return {"access_token": access_token, "token_type": "bearer"} 
+
+@router.get("/me/", response_model=UserResponse)
+def read_current_user(current_user: TokenData = Depends(get_current_user_from_token), db: Session = Depends(get_db)):
+    db_user = crud_user.get_user_by_username(db, username=current_user.username)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_user
