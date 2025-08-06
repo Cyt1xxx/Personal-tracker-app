@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.app.api.endpoints import users
+from src.app.api.endpoints import users, tracker
 
 app = FastAPI(
     title="Personal Tracker API",
@@ -8,6 +8,7 @@ app = FastAPI(
 )
 
 app.include_router(users.router)
+app.include_router(tracker.router)
 
 @app.get("/")
 def read_root():
