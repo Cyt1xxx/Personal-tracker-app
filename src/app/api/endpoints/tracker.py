@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=TrackerEntryResponse, status_code=status.HTTP_201_CREATED)
-def create_tracker_entry(
+def create_tracker_entry_api(
     entry: TrackerEntryCreate,
     current_user: User = Depends(get_current_user_from_token),
     db: Session = Depends(get_db)
