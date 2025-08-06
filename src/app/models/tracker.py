@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 from src.app.database.database import Base
 
 class TrackerEntry(Base):
-    __tablename__ = "tracker_enrites"
+    __tablename__ = "tracker_entries"
 
     id = Column(Integer, primary_key=True)
     title = Column(String, index=True)
