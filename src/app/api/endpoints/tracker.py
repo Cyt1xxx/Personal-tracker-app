@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 
 from typing import List
@@ -29,3 +29,12 @@ def read_tracker_entries(
 ):
     entries = crud_tracker.get_tracker_entries_by_user(db=db, user_id=current_user.id)
     return entries
+
+@router.get("/search", response_model=List[TrackerEntryResponse])
+def sarch_tracker_entries(
+    title: str = Query(..., description = "The title of the tracker entry to search for"),
+    current_user: User = Depends(get_current_user_from_token),
+    db: Session = Depends(get_db)
+):
+    entries = crud_tracker.search_tracker_entries_by_title(db=db, title=title, user_id=current_user.id)
+    return entries 
