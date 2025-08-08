@@ -15,6 +15,6 @@ class TrackerEntry(Base):
     title = Column(String(100), index=True)
     description = Column(String(500))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    owner_id = Column(Integer, ForeignKey("users.id"))
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     owner = relationship("User", back_populates="tracker_entries")
