@@ -14,3 +14,7 @@ class TrackerEntryResponse(BaseModel):
     owner_id: int
 
     model_config = ConfigDict(from_attributes=True)
+
+class TrackerEntryUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
