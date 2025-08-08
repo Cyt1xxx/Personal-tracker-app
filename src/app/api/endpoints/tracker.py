@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
 from sqlalchemy.orm import Session
 
 from typing import List
@@ -54,3 +54,20 @@ def update_tracker_entry_api(
             detail="Entry not found"
         )
     return entry_update
+
+@router.delete("/{entry_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_tracker_entry_api(
+    entry_id: int,
+    current_user: User = Depends(get_current_user_from_token),
+    db: Session = Depends(get_db)
+):
+    del_func = crud_tracker.delete_tracker_entry(db=db, entry_id=entry_id, user_id=current_user.id)
+    if not del_func:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Entry not found"
+        )
+    
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+    
