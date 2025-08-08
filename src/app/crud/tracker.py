@@ -45,3 +45,19 @@ def update_tracker_entry(db: Session, entry_id: int, user_id: int, entry_update:
     db.commit()
 
     return db_entry
+
+
+def delete_tracker_entry(db: Session, entry_id: int, user_id: int) -> bool:
+    db_entry = db.query(TrackerEntry).filter(
+        TrackerEntry.id == entry_id,
+        TrackerEntry.owner_id == user_id
+    ).first()
+
+    if not db_entry:
+        return False
+    
+    db.delete(db_entry)
+
+    db.commit()
+
+    return True
