@@ -20,8 +20,8 @@ def create_tracker_entry(db: Session, entry: TrackerEntryCreate, user_id: int) -
 
     return db_entry
 
-def get_tracker_entries_by_user(db: Session, user_id: int) -> List[TrackerEntry]:
-    return db.query(TrackerEntry).filter(TrackerEntry.owner_id == user_id).all()
+def get_tracker_entries_by_user(db: Session, user_id: int, skip: int, limit: int) -> List[TrackerEntry]:
+    return db.query(TrackerEntry).filter(TrackerEntry.owner_id == user_id).offset(skip).limit(limit).all()
 
 def search_tracker_entries_by_title(db: Session, title: str, user_id: int) -> List[TrackerEntry]:
     return db.query(TrackerEntry).filter(

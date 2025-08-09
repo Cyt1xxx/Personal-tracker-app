@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
 from sqlalchemy.orm import Session
 
-from typing import List
+from typing import List, Literal
 from src.app.models.user import User
 from src.app.models.tracker import TrackerEntry
 from src.app.schemas.tracker import TrackerEntryCreate, TrackerEntryResponse, TrackerEntryUpdate
@@ -26,9 +26,11 @@ def create_tracker_entry_api(
 @router.get("/", response_model=List[TrackerEntryResponse])
 def read_tracker_entries(
     current_user: User = Depends(get_current_user_from_token),
+    skip_entries: int = Query(0, description="Number of items to skip"),
+    limit_entries: Literal[25, 50, 75, 100] = Query(25, description="Limit of entries in single page of user"),
     db: Session = Depends(get_db)
 ):
-    entries = crud_tracker.get_tracker_entries_by_user(db=db, user_id=current_user.id)
+    entries = crud_tracker.get_tracker_entries_by_user(db=db, user_id=current_user.id, skip=skip_entries, limit=limit_entries)
     return entries
 
 @router.get("/search", response_model=List[TrackerEntryResponse])
