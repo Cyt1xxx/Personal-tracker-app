@@ -27,10 +27,11 @@ def create_tracker_entry_api(
 def read_tracker_entries(
     current_user: User = Depends(get_current_user_from_token),
     skip_entries: int = Query(0, description="Number of items to skip"),
-    limit_entries: Literal[25, 50, 75, 100] = Query(25, description="Limit of entries in single page of user"),
+    limit_entries: int = Query(25, description="Limit of entries in single page of user"),
+    sort_by: str = Query("created_at", description="Sorts entries by parametr selected"),
     db: Session = Depends(get_db)
 ):
-    entries = crud_tracker.get_tracker_entries_by_user(db=db, user_id=current_user.id, skip=skip_entries, limit=limit_entries)
+    entries = crud_tracker.get_tracker_entries_by_user(db=db, user_id=current_user.id, skip=skip_entries, limit=limit_entries, sort_by=sort_by)
     return entries
 
 @router.get("/search", response_model=List[TrackerEntryResponse])

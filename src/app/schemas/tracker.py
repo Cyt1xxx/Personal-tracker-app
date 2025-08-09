@@ -9,7 +9,7 @@ class TrackerEntryCreate(BaseModel):
 class TrackerEntryResponse(BaseModel):
     id: int
     title: str
-    description: str
+    description: Optional[str] = None
     created_at: datetime
     owner_id: int
 
