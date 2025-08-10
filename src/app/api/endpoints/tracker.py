@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
 from sqlalchemy.orm import Session
 
-from typing import List, Literal
+from typing import List
 from src.app.models.user import User
 from src.app.models.tracker import TrackerEntry
 from src.app.schemas.tracker import TrackerEntryCreate, TrackerEntryResponse, TrackerEntryUpdate
@@ -31,6 +31,13 @@ def read_tracker_entries(
     sort_by: str = Query("created_at", description="Sorts entries by parametr selected"),
     db: Session = Depends(get_db)
 ):
+    allowed_limits = [25, 50, 75, 100]
+    if limit_entries not in allowed_limits:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Limit must be one of {allowed_limits}"
+        )
+    
     entries = crud_tracker.get_tracker_entries_by_user(db=db, user_id=current_user.id, skip=skip_entries, limit=limit_entries, sort_by=sort_by)
     return entries
 
