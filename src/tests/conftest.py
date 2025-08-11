@@ -39,5 +39,11 @@ def client(db):
     
     app.dependency_overrides.clear()
 
-
+@pytest.fixture()
+def test_user_data():
+    return {
+        "username": "BobTheGoa8095",
+        "password": "12345678",
+        "email": "BobTheGoa8095@gmail.com"
+    }
     
